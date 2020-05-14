@@ -1,26 +1,20 @@
 package com.lkb.fbquizapp.view.quiz
 
 import androidx.lifecycle.ViewModel
-import com.lkb.fbquizapp.model.QuizApiService
-import com.lkb.fbquizapp.model.persistance.AppDatabase
+import com.lkb.fbquizapp.model.Repository
 import com.lkb.fbquizapp.model.persistance.QuizModelList
 import com.lkb.fbquizapp.model.persistance.User
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import org.koin.java.KoinJavaComponent.inject
 
-class QuizViewModel(private val db: AppDatabase) : ViewModel() {
-    private val quizApiService by lazy {
-        QuizApiService.create()
-    }
-
+class QuizViewModel : ViewModel() {
+    private val repository: Repository by inject(Repository::class.java)
     fun callQuizApi(): Observable<QuizModelList.QuizModel> {
-        return quizApiService.getQuiz()
+        return repository.getQuizService().getQuiz()
     }
 
     fun saveUserData(currentUser: User): Completable? {
-        return db?.userDao()?.insertUser(currentUser)
+        return repository.getDataBase().userDao()?.insertUser(currentUser)
     }
 }

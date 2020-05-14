@@ -2,6 +2,7 @@ package com.lkb.fbquizapp.di
 
 import androidx.room.Room
 import com.lkb.fbquizapp.DATABASE_NAME
+import com.lkb.fbquizapp.model.Repository
 import com.lkb.fbquizapp.model.persistance.AppDatabase
 import com.lkb.fbquizapp.view.quiz.QuizViewModel
 import com.lkb.fbquizapp.view.result.ResultViewModel
@@ -17,6 +18,7 @@ val appModule = module {
             DATABASE_NAME
         ).build()
     }
-    viewModel { QuizViewModel(get()) }
-    viewModel { ResultViewModel(get()) }
+    single { Repository(get()) }
+    viewModel { QuizViewModel() }
+    viewModel { ResultViewModel() }
 }
