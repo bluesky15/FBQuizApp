@@ -44,7 +44,7 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/userAge"
         android:layout_width="180dp"
-        android:layout_height="46dp"
+        android:layout_height="44dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:background="@color/white"
@@ -53,14 +53,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userName" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/userSex"
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/userGender"
         android:layout_width="180dp"
-        android:layout_height="48dp"
+        android:layout_height="44dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
         android:background="@color/white"
-        android:hint="Sex"
+        android:hint="Gender"
         android:paddingStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userAge" />

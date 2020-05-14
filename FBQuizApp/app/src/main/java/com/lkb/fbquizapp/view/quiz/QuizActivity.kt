@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.lkb.fbquizapp.BaseActivity
-import com.lkb.fbquizapp.R
+import com.lkb.fbquizapp.*
 import com.lkb.fbquizapp.model.persistance.QuizModelList
 import com.lkb.fbquizapp.model.persistance.User
 import com.lkb.fbquizapp.util.CountDownTimer
@@ -39,13 +38,13 @@ class QuizActivity : BaseActivity() {
         viewModel = get()
         try {
             currentUser = User(
-                intent.getStringExtra("name"),
-                intent.getStringExtra("age").toInt(),
-                intent.getStringExtra("sex"),
+                intent.getStringExtra(NAME),
+                intent.getStringExtra(AGE).toInt(),
+                intent.getStringExtra(GENDER),
                 0
             )
         } catch (e: NumberFormatException) {
-            Toast.makeText(this, "Please Provide Valid Input", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, VALID_INPUT, Toast.LENGTH_SHORT).show()
         }
 
         disposable = viewModel.callQuizApi()
@@ -68,10 +67,9 @@ class QuizActivity : BaseActivity() {
                 timerDisposable?.dispose()
                 tvTimer.text = 0.toString()
                 tvTotalPoint.text = totalPoints.toString()
-
                 loadQuiz()
             } else {
-                tvSubmit.text = "See Top Results"
+                tvSubmit.text = SEE_TOP_RESULTS
                 timerDisposable?.dispose()
                 currentUser?.let {
                     it.score = totalPoints
@@ -85,7 +83,7 @@ class QuizActivity : BaseActivity() {
                                     ResultActivity::class.java
                                 )
                             )
-                        }) { throwable -> Log.d("LKB", "" + throwable) }
+                        }) { throwable -> Log.d(localClassName, "" + throwable) }
                 }
 
 
