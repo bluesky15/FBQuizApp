@@ -20,17 +20,7 @@ class QuizViewModel(private val db: AppDatabase) : ViewModel() {
         return quizApiService.getQuiz()
     }
 
-    fun saveUserData(currentUser: User): Single<Boolean> {
-        return try {
-            Completable.fromAction {
-                db?.userDao()?.insertAll(currentUser)
-            }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-            Single.just(true)
-        } catch (e: Exception) {
-            e.stackTrace
-            Single.just(false)
-        }
+    fun saveUserData(currentUser: User): Completable? {
+        return db?.userDao()?.insertUser(currentUser)
     }
 }

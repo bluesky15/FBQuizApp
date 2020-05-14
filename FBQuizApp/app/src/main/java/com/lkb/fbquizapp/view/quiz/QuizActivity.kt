@@ -78,12 +78,17 @@ class QuizActivity : BaseActivity() {
                 timerDisposable?.dispose()
                 currentUser?.let {
                     it.score = totalPoints
-                    viewModel.saveUserData(currentUser!!).observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { e ->
-                            if (e) {
-                                startActivity(Intent(this, ResultActivity::class.java))
-                            }
-                        }
+                    viewModel.saveUserData(currentUser!!)
+                        ?.subscribeOn(Schedulers.io())
+                        ?.observeOn(AndroidSchedulers.mainThread())
+                        ?.subscribe({
+                            startActivity(
+                                Intent(
+                                    this,
+                                    ResultActivity::class.java
+                                )
+                            )
+                        }) { throwable -> Log.d("LKB", "" + throwable) }
                 }
 
 

@@ -6,7 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-const val DATABASE_NAME = "quiz_db"
+const val DATABASE_NAME = "quiz.db"
 
 @Database(entities = [User::class], version = 1)//arrayOf(User::class)
 abstract class AppDatabase : RoomDatabase() {
