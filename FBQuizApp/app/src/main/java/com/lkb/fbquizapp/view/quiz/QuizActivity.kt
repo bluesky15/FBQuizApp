@@ -1,14 +1,14 @@
-package com.lkb.fbquizapp.view
+package com.lkb.fbquizapp.view.quiz
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.lkb.fbquizapp.*
-import com.lkb.fbquizapp.model.QuizModelList
+import com.lkb.fbquizapp.model.persistance.QuizModelList
 import com.lkb.fbquizapp.util.CountDownTimer
+import com.lkb.fbquizapp.view.result.ResultActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 
-class QuizActivity : AppCompatActivity() {
+class QuizActivity : BaseActivity() {
     var enteredAnswer = ""
     var correctAnswer = ""
     var counter = 0
@@ -60,7 +60,7 @@ class QuizActivity : AppCompatActivity() {
             } else {
                 tvSubmit.text = "See Top Results"
                 timerDisposable?.dispose()
-                startActivity(Intent(this, TopResultsActivity::class.java))
+                startActivity(Intent(this, ResultActivity::class.java))
             }
 
         }

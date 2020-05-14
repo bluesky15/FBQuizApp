@@ -1,15 +1,16 @@
-package com.lkb.fbquizapp.view
+package com.lkb.fbquizapp.view.main
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.lkb.fbquizapp.BaseActivity
 import com.lkb.fbquizapp.R
-import com.lkb.fbquizapp.model.User
+import com.lkb.fbquizapp.model.persistance.User
+import com.lkb.fbquizapp.view.quiz.QuizActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,12 @@ class MainActivity : AppCompatActivity() {
                 val name = userName.text.toString()
                 var userGender = userSex.text.toString()
                 val age = userAge.text.toString().toInt()
-                val user = User(name, age, userGender, 0)
+                val user = User(
+                    name,
+                    age,
+                    userGender,
+                    0
+                )
                 mainViewModel.addUser(user)
                     .subscribe { e ->
                         if (e) {

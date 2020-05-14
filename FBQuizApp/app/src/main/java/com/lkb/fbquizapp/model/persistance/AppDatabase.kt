@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp.model
+package com.lkb.fbquizapp.model.persistance
 
 import android.content.Context
 import android.util.Log

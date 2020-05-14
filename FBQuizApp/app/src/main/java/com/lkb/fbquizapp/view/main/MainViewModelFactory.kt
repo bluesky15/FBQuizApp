@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp.view
+package com.lkb.fbquizapp.view.main
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

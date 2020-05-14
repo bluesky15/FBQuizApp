@@ -1,5 +1,6 @@
 package com.lkb.fbquizapp.model
 
+import com.lkb.fbquizapp.model.persistance.QuizModelList
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

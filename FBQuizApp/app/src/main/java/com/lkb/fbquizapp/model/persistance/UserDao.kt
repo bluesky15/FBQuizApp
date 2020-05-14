@@ -1,10 +1,10 @@
-package com.lkb.fbquizapp.model
+package com.lkb.fbquizapp.model.persistance
 
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.lkb.fbquizapp.model.User
+import com.lkb.fbquizapp.model.persistance.User
 import io.reactivex.Maybe
 
 @Dao

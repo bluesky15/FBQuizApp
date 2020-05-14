@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp.model
+package com.lkb.fbquizapp.model.persistance
 
 object QuizModelList {
     class QuizModel : ArrayList<Quiz>()
