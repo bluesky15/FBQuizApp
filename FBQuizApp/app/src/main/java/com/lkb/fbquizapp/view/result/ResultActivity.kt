@@ -1,14 +1,13 @@
 package com.lkb.fbquizapp.view.result
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lkb.fbquizapp.BaseActivity
 import com.lkb.fbquizapp.R
-import com.lkb.fbquizapp.model.persistance.AppDatabase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.koin.android.ext.android.get
 
 class ResultActivity: BaseActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -21,13 +20,7 @@ class ResultActivity: BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = RecyclerViewAdapter()
         recyclerView.adapter = adapter
-        val db = AppDatabase.getInstance(this)
-        db?.let {
-            viewModel = ViewModelProvider(
-                this,
-                ResultViewModelFactory(it)
-            ).get(ResultViewModel::class.java)
-        }
+        viewModel = get()
         viewModel.getTopResults()
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribeOn(Schedulers.io())

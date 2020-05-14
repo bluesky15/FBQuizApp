@@ -19,7 +19,7 @@ abstract class CountDownTimer(
         Observable.zip(
             Observable.range(0, startValue.toInt()),
             Observable.interval(1, timeUnit),
-            BiFunction { integer: Int, aLong: Long? ->
+            BiFunction { integer: Int, _: Long? ->
                 val l = startValue - integer
                 l
             }
@@ -44,9 +44,7 @@ abstract class CountDownTimer(
             })
         return disposable
     }
-
     fun cancel() {
         if (disposable != null) disposable!!.dispose()
     }
-
 }

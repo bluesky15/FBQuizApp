@@ -4,10 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import android.widget.Toast
 import com.lkb.fbquizapp.BaseActivity
 import com.lkb.fbquizapp.R
-import com.lkb.fbquizapp.model.persistance.AppDatabase
 import com.lkb.fbquizapp.model.persistance.QuizModelList
 import com.lkb.fbquizapp.model.persistance.User
 import com.lkb.fbquizapp.util.CountDownTimer
@@ -16,39 +15,37 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.quiz_activity.*
+import org.koin.android.ext.android.get
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 
 class QuizActivity : BaseActivity() {
-    var enteredAnswer = ""
-    var correctAnswer = ""
-    var counter = 0
-    var currentUser: User? = null
-    lateinit var viewModel: QuizViewModel
-    lateinit var disposable: Disposable
-    lateinit var quizLists: QuizModelList.QuizModel
+    private var enteredAnswer = ""
+    private var correctAnswer = ""
+    private var counter = 0
+    private var currentUser: User? = null
+    private lateinit var viewModel: QuizViewModel
+    private lateinit var disposable: Disposable
+    private lateinit var quizLists: QuizModelList.QuizModel
     private val correctAnswerPoint = 20
     private val incorrectAnswerPoint = -10
     private var timerDisposable: Disposable? = null
-    var totalPoints = 0
+    private var totalPoints = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quiz_activity)
         val intent = intent
-        currentUser = User(
-            intent.getStringExtra("name"),
-            intent.getStringExtra("age").toInt(),
-            intent.getStringExtra("sex"),
-            0
-        )
-
-        val db = AppDatabase.getInstance(this)
-        db?.let {
-            viewModel = ViewModelProvider(
-                this,
-                QuizViewModelFactory(it)
-            ).get(QuizViewModel::class.java)
+        viewModel = get()
+        try {
+            currentUser = User(
+                intent.getStringExtra("name"),
+                intent.getStringExtra("age").toInt(),
+                intent.getStringExtra("sex"),
+                0
+            )
+        } catch (e: NumberFormatException) {
+            Toast.makeText(this, "Please Provide Valid Input", Toast.LENGTH_SHORT).show()
         }
 
         disposable = viewModel.callQuizApi()

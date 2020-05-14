@@ -19,13 +19,10 @@ class MainActivity : BaseActivity() {
         }
         button.setOnClickListener {
             try {
-                val name = userName.text.toString()
-                var userGender = userSex.text.toString()
-                val age = userAge.text.toString()
                 val intent = Intent(this, QuizActivity::class.java)
-                intent.putExtra("name", name)
-                intent.putExtra("age", age)
-                intent.putExtra("sex", userGender)
+                intent.putExtra("name", userName.text.toString())
+                intent.putExtra("age", userAge.text.toString())
+                intent.putExtra("sex", userSex.text.toString())
                 startActivity(intent)
             } catch (e: NumberFormatException) {
                 Toast.makeText(this, "Please Provide Valid Input", Toast.LENGTH_SHORT).show()

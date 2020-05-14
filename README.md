@@ -4,8 +4,8 @@ A basic quiz app which saves user information, lets the user play a quiz and sho
 # Architecture followed: 
 MVVM
 # Libray Used:
-Rxjava
-Retrofit
-Dagger - in progress
+  Rxjava,
+  Retrofit,
+  Koin (dependency Injection),
 # UI/UX - designed using:
 Figma

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/black"
     tools:context=".view.main.MainActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -31,7 +31,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="292dp"
         android:layout_marginEnd="24dp"
-        android:background="#ffffff"
+        android:background="@color/white"
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
@@ -47,7 +47,7 @@
         android:layout_height="46dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:background="#ffffff"
+        android:background="@color/white"
         android:hint="Age"
         android:paddingStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
-        android:background="#ffffff"
+        android:background="@color/white"
         android:hint="Sex"
         android:paddingStart="16dp"
         app:layout_constraintStart_toStartOf="parent"

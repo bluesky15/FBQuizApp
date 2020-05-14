@@ -37,6 +37,7 @@ android {
 dependencies {
     def lifecycle_version = "2.2.0"
     def room_version = '2.2.5'
+    def koin_version = '2.1.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.3.72"
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -67,4 +68,13 @@ dependencies {
 // Testing support
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
+
+    // Koin
+    // Koin for Android
+    implementation "org.koin:koin-android:$koin_version"
+    // Koin for Android Scope feature
+    implementation "org.koin:koin-android-scope:$koin_version"
+    // Koin for Android - ViewModel features
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
+    implementation "org.koin:koin-android-architecture:1.0.0-alpha-12"
 }
