@@ -1,10 +1,12 @@
-package com.lkb.fbquizapp
+package com.lkb.fbquizapp.view
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.lkb.fbquizapp.R
+import com.lkb.fbquizapp.model.User
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -12,7 +14,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val mainViewModel: MainViewModel = ViewModelProvider(this, MainViewModelFactory(this))
+        val mainViewModel: MainViewModel = ViewModelProvider(this,
+            MainViewModelFactory(this)
+        )
             .get(MainViewModel::class.java)
 
         button.setOnClickListener {

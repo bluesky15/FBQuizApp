@@ -1,9 +1,10 @@
-package com.lkb.fbquizapp
+package com.lkb.fbquizapp.model
 
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.lkb.fbquizapp.model.User
 import io.reactivex.Maybe
 
 @Dao
@@ -12,6 +13,6 @@ interface UserDao {
     fun getAllUser(): Maybe<List<User>>
 
     @Insert
-    fun insertAll(vararg user:User)
+    fun insertAll(vararg user: User)
 
 }

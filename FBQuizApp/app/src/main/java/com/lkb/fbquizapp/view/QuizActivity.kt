@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp
+package com.lkb.fbquizapp.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,9 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.lkb.fbquizapp.*
+import com.lkb.fbquizapp.model.QuizModelList
+import com.lkb.fbquizapp.util.CountDownTimer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +30,9 @@ class QuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quiz_activity)
-        val quizViewModel: QuizViewModel = ViewModelProvider(this, QuizViewModelFactory())
+        val quizViewModel: QuizViewModel = ViewModelProvider(this,
+            QuizViewModelFactory()
+        )
             .get(QuizViewModel::class.java)
 
         disposable = quizViewModel.callQuizApi()

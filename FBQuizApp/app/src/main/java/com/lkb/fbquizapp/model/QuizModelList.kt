@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp
+package com.lkb.fbquizapp.model
 
 object QuizModelList {
     class QuizModel : ArrayList<Quiz>()

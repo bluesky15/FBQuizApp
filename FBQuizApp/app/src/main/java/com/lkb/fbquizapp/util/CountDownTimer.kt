@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp
+package com.lkb.fbquizapp.util
 
 import io.reactivex.Observable
 import io.reactivex.Observer

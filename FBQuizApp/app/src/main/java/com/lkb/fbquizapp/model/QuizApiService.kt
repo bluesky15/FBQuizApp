@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp
+package com.lkb.fbquizapp.model
 
 import io.reactivex.Observable
 import retrofit2.Retrofit

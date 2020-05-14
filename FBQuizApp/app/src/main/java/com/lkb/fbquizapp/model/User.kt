@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp
+package com.lkb.fbquizapp.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

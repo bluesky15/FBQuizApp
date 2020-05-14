@@ -1,4 +1,4 @@
-package com.lkb.fbquizapp
+package com.lkb.fbquizapp.model
 
 import android.content.Context
 import android.util.Log
@@ -20,7 +20,8 @@ abstract class AppDatabase : RoomDatabase() {
                     Log.d(LOG_TAG, "Creating new database instance")
                     sInstance = Room.databaseBuilder(
                         context.applicationContext,
-                        AppDatabase::class.java, DATABASE_NAME
+                        AppDatabase::class.java,
+                        DATABASE_NAME
                     ).build()
                 }
             }
