@@ -65,4 +65,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userAge" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivAllTimeTopResults"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        app:srcCompat="@drawable/ic_all_time_top_results_"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

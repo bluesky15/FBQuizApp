@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.lkb.fbquizapp.*
+import com.lkb.fbquizapp.BaseActivity
+import com.lkb.fbquizapp.R
+import com.lkb.fbquizapp.model.persistance.AppDatabase
 import com.lkb.fbquizapp.model.persistance.QuizModelList
+import com.lkb.fbquizapp.model.persistance.User
 import com.lkb.fbquizapp.util.CountDownTimer
 import com.lkb.fbquizapp.view.result.ResultActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,6 +24,8 @@ class QuizActivity : BaseActivity() {
     var enteredAnswer = ""
     var correctAnswer = ""
     var counter = 0
+    var currentUser: User? = null
+    lateinit var viewModel: QuizViewModel
     lateinit var disposable: Disposable
     lateinit var quizLists: QuizModelList.QuizModel
     private val correctAnswerPoint = 20
@@ -30,12 +35,23 @@ class QuizActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quiz_activity)
-        val quizViewModel: QuizViewModel = ViewModelProvider(this,
-            QuizViewModelFactory()
+        val intent = intent
+        currentUser = User(
+            intent.getStringExtra("name"),
+            intent.getStringExtra("age").toInt(),
+            intent.getStringExtra("sex"),
+            0
         )
-            .get(QuizViewModel::class.java)
 
-        disposable = quizViewModel.callQuizApi()
+        val db = AppDatabase.getInstance(this)
+        db?.let {
+            viewModel = ViewModelProvider(
+                this,
+                QuizViewModelFactory(it)
+            ).get(QuizViewModel::class.java)
+        }
+
+        disposable = viewModel.callQuizApi()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
@@ -60,7 +76,17 @@ class QuizActivity : BaseActivity() {
             } else {
                 tvSubmit.text = "See Top Results"
                 timerDisposable?.dispose()
-                startActivity(Intent(this, ResultActivity::class.java))
+                currentUser?.let {
+                    it.score = totalPoints
+                    viewModel.saveUserData(currentUser!!).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { e ->
+                            if (e) {
+                                startActivity(Intent(this, ResultActivity::class.java))
+                            }
+                        }
+                }
+
+
             }
 
         }
@@ -71,11 +97,11 @@ class QuizActivity : BaseActivity() {
         val length = quizLists.size
         val index = Random.nextInt(0, length)
         val quiz = quizLists[index]
-        tvQuestion.text = quiz.question
-        radio_one.text = quiz.options[0]
-        radio_two.text = quiz.options[1]
-        radio_three.text = quiz.options[2]
-        radio_four.text = quiz.options[3]
+        tvQuestion.text = quiz.question.toUpperCase()
+        radio_one.text = quiz.options[0].toUpperCase()
+        radio_two.text = quiz.options[1].toUpperCase()
+        radio_three.text = quiz.options[2].toUpperCase()
+        radio_four.text = quiz.options[3].toUpperCase()
         correctAnswer = quiz.answer
         startTimer()
     }
@@ -96,7 +122,6 @@ class QuizActivity : BaseActivity() {
 
     fun checkButton(v: View?) {
         val radioId: Int = radioGroup.checkedRadioButtonId
-        // val radioButton = findViewById<RadioButton>(radioId);
         enteredAnswer = when (radioId) {
             R.id.radio_one -> "A"
             R.id.radio_two -> "B"
@@ -104,5 +129,11 @@ class QuizActivity : BaseActivity() {
             R.id.radio_four -> "D"
             else -> ""
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
+        timerDisposable?.dispose()
     }
 }
