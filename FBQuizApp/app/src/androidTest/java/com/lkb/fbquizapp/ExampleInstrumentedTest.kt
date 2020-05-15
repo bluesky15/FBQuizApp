@@ -2,8 +2,7 @@ package com.lkb.fbquizapp
 
 import android.content.ComponentName
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
@@ -49,7 +48,6 @@ class ExampleInstrumentedTest {
     @Test
     fun enter_name_in_name_field() {
         onView(withId(R.id.userName)).perform(typeText("John Doe"))
-        //onView(withId(R.id.userAge)).perform(typeText("22"))
     }
 
     @Test
@@ -64,6 +62,12 @@ class ExampleInstrumentedTest {
 
     @Test
     fun button_click_check_correct_activity_launched() {
+        onView(withId(R.id.userName)).perform(typeText("John Doe"))
+        onView(withId(R.id.userName)).perform(closeSoftKeyboard())
+        onView(withId(R.id.userAge)).perform(typeText("22"))
+        onView(withId(R.id.userAge)).perform(closeSoftKeyboard())
+        onView(withId(R.id.userGender)).perform(typeText("male"))
+        onView(withId(R.id.userGender)).perform(closeSoftKeyboard())
         Intents.init()
         onView(withId(R.id.button)).perform(click())
         intended(
@@ -74,6 +78,7 @@ class ExampleInstrumentedTest {
                 )
             )
         )
-        Intents.release();
+        Intents.release()
+        onView(withId(R.id.tvSubmit)).perform(click())
     }
 }
