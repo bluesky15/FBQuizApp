@@ -1,7 +1,9 @@
 package com.lkb.fbquizapp.di
 
+import android.content.Context
 import androidx.room.Room
 import com.lkb.fbquizapp.DATABASE_NAME
+import com.lkb.fbquizapp.SHARED_PREF_KEY
 import com.lkb.fbquizapp.model.Repository
 import com.lkb.fbquizapp.model.persistance.AppDatabase
 import com.lkb.fbquizapp.view.quiz.QuizViewModel
@@ -18,7 +20,8 @@ val appModule = module {
             DATABASE_NAME
         ).build()
     }
-    single { Repository(get()) }
+    single { androidContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE) }
+    single { Repository(get(), get()) }
     viewModel { QuizViewModel() }
     viewModel { ResultViewModel() }
 }
