@@ -70,6 +70,7 @@ class QuizActivity : BaseActivity() {
                 loadQuiz()
             } else {
                 tvSubmit.text = SEE_TOP_RESULTS
+                tvTimer.text = 0.toString()
                 timerDisposable?.dispose()
                 currentUser?.let {
                     it.score = totalPoints

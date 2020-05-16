@@ -74,12 +74,16 @@ dependencies {
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
-    // Koin
-    // Koin for Android
+// Koin for Android
     implementation "org.koin:koin-android:$koin_version"
-    // Koin for Android Scope feature
-    implementation "org.koin:koin-android-scope:$koin_version"
-    // Koin for Android - ViewModel features
-    implementation "org.koin:koin-android-viewmodel:$koin_version"
-    implementation "org.koin:koin-android-architecture:1.0.0-alpha-12"
+    // or Koin for Lifecycle scoping
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    // or Koin for Android Architecture ViewModel
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    // or Koin for Android Fragment Factory (unstable version)
+    implementation "org.koin:koin-androidx-fragment:$koin_version"
+    // Koin testing tools
+    testImplementation "org.koin:koin-test:$koin_version"
+
+    testImplementation "org.mockito:mockito-core:2.1.0"
 }

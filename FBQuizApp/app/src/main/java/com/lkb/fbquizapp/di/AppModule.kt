@@ -9,7 +9,7 @@ import com.lkb.fbquizapp.model.persistance.AppDatabase
 import com.lkb.fbquizapp.view.quiz.QuizViewModel
 import com.lkb.fbquizapp.view.result.ResultViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -20,7 +20,14 @@ val appModule = module {
             DATABASE_NAME
         ).build()
     }
-    single { androidContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE) }
+    single { get<AppDatabase>().userDao() }
+    single {
+        androidContext()
+            .getSharedPreferences(
+                SHARED_PREF_KEY
+                , Context.MODE_PRIVATE
+            )
+    }
     single { Repository(get(), get()) }
     viewModel { QuizViewModel() }
     viewModel { ResultViewModel() }
