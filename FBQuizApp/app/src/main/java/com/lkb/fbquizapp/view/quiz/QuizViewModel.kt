@@ -2,7 +2,6 @@ package com.lkb.fbquizapp.view.quiz
 
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
-import com.lkb.fbquizapp.QUIZ_LIST
 import com.lkb.fbquizapp.model.Repository
 import com.lkb.fbquizapp.model.persistance.QuizModelList
 import com.lkb.fbquizapp.model.persistance.User
@@ -16,16 +15,13 @@ class QuizViewModel : ViewModel() {
     private val repository: Repository by inject(Repository::class.java)
     fun callQuizApi(): Observable<QuizModelList.QuizModel> {
         var quizData: Observable<QuizModelList.QuizModel>? = null
-        val localData = repository.getSharedPreference().getString(QUIZ_LIST, "")
+        var localData = repository.getLocalData()
         localData?.let { it ->
             quizData = if (it.isEmpty()) {
-                val data = repository.getQuizService().getQuiz()
+                val data = repository.getQuiz()
                 data.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { e ->
-                        repository.getSharedPreference().edit()
-                            .putString(QUIZ_LIST, Gson().toJson(e))
-                    }
+                    .subscribe { e -> repository.saveQuizData(Gson().toJson(e)) }
                 data
             } else {
                 Observable.just(Gson().fromJson(it, QuizModelList.QuizModel::class.java))
@@ -35,6 +31,6 @@ class QuizViewModel : ViewModel() {
     }
 
     fun saveUserData(currentUser: User): Completable? {
-        return repository.getDataBase().userDao()?.insertUser(currentUser)
+        return repository.insertUser(currentUser)
     }
 }

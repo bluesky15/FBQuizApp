@@ -26,15 +26,28 @@ class MainActivity : BaseActivity() {
             startActivity(Intent(this, ResultActivity::class.java))
         }
         button.setOnClickListener {
-            try {
-                val intent = Intent(this, QuizActivity::class.java)
+            createIntent()?.let { i -> startActivity(i) }
+        }
+    }
+
+    private fun createIntent(): Intent? {
+        var intent: Intent? = null
+        val validGenderInput =
+            arrayOf("M", "F", "m", "f", "male", "female", "MALE", "FEMALE", "Male", "Female")
+        try {
+            if (validGenderInput.contains(userGender.text.toString())
+                && userAge.text.toString().toInt() != 0
+            ) {
+                intent = Intent(this, QuizActivity::class.java)
                 intent.putExtra(NAME, userName.text.toString())
                 intent.putExtra(AGE, userAge.text.toString())
                 intent.putExtra(GENDER, userGender.text.toString())
-                startActivity(intent)
-            } catch (e: NumberFormatException) {
+            } else {
                 Toast.makeText(this, VALID_INPUT, Toast.LENGTH_SHORT).show()
             }
+        } catch (e: Exception) {
+            Toast.makeText(this, VALID_INPUT, Toast.LENGTH_SHORT).show()
         }
+        return intent
     }
 }
