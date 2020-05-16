@@ -36,16 +36,12 @@ class QuizActivity : BaseActivity() {
         setContentView(R.layout.quiz_activity)
         val intent = intent
         viewModel = get()
-        try {
-            currentUser = User(
-                intent.getStringExtra(NAME),
-                intent.getStringExtra(AGE).toInt(),
-                intent.getStringExtra(GENDER),
-                0
-            )
-        } catch (e: NumberFormatException) {
-            Toast.makeText(this, VALID_INPUT, Toast.LENGTH_SHORT).show()
-        }
+        currentUser = User(
+            intent.getStringExtra(NAME),
+            intent.getStringExtra(AGE).toInt(),
+            intent.getStringExtra(GENDER),
+            0
+        )
 
         disposable = viewModel.callQuizApi()
             .observeOn(AndroidSchedulers.mainThread())
