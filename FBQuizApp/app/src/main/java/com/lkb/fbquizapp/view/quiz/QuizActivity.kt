@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.lkb.fbquizapp.*
 import com.lkb.fbquizapp.model.persistance.QuizModelList
 import com.lkb.fbquizapp.model.persistance.User
@@ -16,17 +17,14 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.quiz_activity.*
 import org.koin.android.ext.android.get
 import java.util.concurrent.TimeUnit
-import kotlin.random.Random
 
 
 class QuizActivity : BaseActivity() {
     private var enteredAnswer = ""
     private var correctAnswer = ""
     private var counter = 0
-    private var currentUser: User? = null
+    private var isDataAvailable = false
     private lateinit var viewModel: QuizViewModel
-    private lateinit var disposable: Disposable
-    private lateinit var quizLists: QuizModelList.QuizModel
     private val correctAnswerPoint = 20
     private val incorrectAnswerPoint = -10
     private var timerDisposable: Disposable? = null
@@ -36,71 +34,63 @@ class QuizActivity : BaseActivity() {
         setContentView(R.layout.quiz_activity)
         val intent = intent
         viewModel = get()
-        currentUser = User(
+        viewModel.currentUser = User(
             intent.getStringExtra(NAME),
             intent.getStringExtra(AGE).toInt(),
             intent.getStringExtra(GENDER),
             0
         )
-
-        disposable = viewModel.callQuizApi()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                // textView.text = it[0].toString();
-                quizLists = it
-                loadQuiz()
-            }
+        viewModel.data.observe(this, Observer<QuizModelList.Quiz> {
+            tvQuestion.text = it.question.toUpperCase()
+            radio_one.text = it.options[0].toUpperCase()
+            radio_two.text = it.options[1].toUpperCase()
+            radio_three.text = it.options[2].toUpperCase()
+            radio_four.text = it.options[3].toUpperCase()
+            correctAnswer = it.answer
+            startTimer()
+        })
+        viewModel.callQuizApi().observe(this, Observer { success ->
+                if (success) {
+                    isDataAvailable = true
+                    viewModel.nextQuestion()
+                } else {
+                    isDataAvailable = false
+                    Toast.makeText(this, "Error loading Data", Toast.LENGTH_SHORT).show()
+                }
+            })
 
         tvSubmit.setOnClickListener {
             counter += 1
             if (counter < 5) {
-                if (tvTimer.text.toString().toInt() == 0 || enteredAnswer != correctAnswer) {
-                    totalPoints += incorrectAnswerPoint
+                totalPoints += if (tvTimer.text.toString().toInt() == 0 || enteredAnswer != correctAnswer) {
+                    incorrectAnswerPoint
                 } else {
-                    totalPoints += tvTimer.text.toString().toInt() + correctAnswerPoint
+                    tvTimer.text.toString().toInt() + correctAnswerPoint
                 }
                 timerDisposable?.dispose()
                 tvTimer.text = 0.toString()
                 tvTotalPoint.text = totalPoints.toString()
-                loadQuiz()
+                viewModel.nextQuestion()
             } else {
                 tvSubmit.text = SEE_TOP_RESULTS
                 tvTimer.text = 0.toString()
                 timerDisposable?.dispose()
-                currentUser?.let {
-                    it.score = totalPoints
-                    viewModel.saveUserData(currentUser!!)
-                        ?.subscribeOn(Schedulers.io())
-                        ?.observeOn(AndroidSchedulers.mainThread())
-                        ?.subscribe({
-                            startActivity(
-                                Intent(
-                                    this,
-                                    ResultActivity::class.java
-                                )
+                viewModel.updateScore(totalPoints)
+                viewModel.saveUserData()
+                    ?.subscribeOn(Schedulers.io())
+                    ?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribe({
+                        startActivity(
+                            Intent(
+                                this,
+                                ResultActivity::class.java
                             )
-                        }) { throwable -> Log.d(localClassName, "" + throwable) }
-                }
-
-
+                        )
+                    }) { throwable -> Log.d(localClassName, "" + throwable) }
             }
 
         }
 
-    }
-
-    private fun loadQuiz() {
-        val length = quizLists.size
-        val index = Random.nextInt(0, length)
-        val quiz = quizLists[index]
-        tvQuestion.text = quiz.question.toUpperCase()
-        radio_one.text = quiz.options[0].toUpperCase()
-        radio_two.text = quiz.options[1].toUpperCase()
-        radio_three.text = quiz.options[2].toUpperCase()
-        radio_four.text = quiz.options[3].toUpperCase()
-        correctAnswer = quiz.answer
-        startTimer()
     }
 
     private fun startTimer() {
@@ -118,19 +108,11 @@ class QuizActivity : BaseActivity() {
     }
 
     fun checkButton(v: View?) {
-        val radioId: Int = radioGroup.checkedRadioButtonId
-        enteredAnswer = when (radioId) {
-            R.id.radio_one -> "A"
-            R.id.radio_two -> "B"
-            R.id.radio_three -> "C"
-            R.id.radio_four -> "D"
-            else -> ""
-        }
+        enteredAnswer = viewModel.mapOptionToString(radioGroup.checkedRadioButtonId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        disposable?.dispose()
         timerDisposable?.dispose()
     }
 }
